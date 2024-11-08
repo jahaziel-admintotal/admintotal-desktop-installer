@@ -1,0 +1,86 @@
+services:
+  django:
+    image: admintotal/desktop:latest
+    container_name: desktop-django
+    command: >
+      bash -c "python manage.py migrate && gunicorn core.wsgi:application --bind 0.0.0.0:7000"
+    environment:
+      - DEBUG=0
+      - DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1]
+      - CELERY_BROKER=redis://redis:6379/0
+      - CELERY_BACKEND=redis://redis:6379/0
+      - DB_PORT=5433
+      - DB_HOST=db
+      - DB_NAME=admintotal_desktop
+      - DB_USER=admintotal
+      - DB_PASSWORD=postgres
+      - ADMINTOTAL_URL_TEMPLATE=https://{0}.admintotal.com
+      - LOCAL_DEVELOPMENT=0
+    depends_on:
+      - db
+      - redis
+
+  nginx:
+    image: admintotal/desktop-nginx:latest
+    container_name: desktop-nginx
+    ports:
+      - "3001:3000"
+      - "8081:80"
+    depends_on:
+      - django
+
+  celery:
+    image: admintotal/desktop:latest
+    container_name: desktop-celery
+    command: celery -A core worker -l INFO
+    environment:
+      - DEBUG=0
+      - DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1]
+      - CELERY_BROKER=redis://redis:6379/0
+      - CELERY_BACKEND=redis://redis:6379/0
+      - DB_PORT=5433
+      - DB_HOST=db
+      - DB_NAME=admintotal_desktop
+      - DB_USER=admintotal
+      - DB_PASSWORD=postgres
+    depends_on:
+      - django
+      - redis
+
+  celery_beat:
+    image: admintotal/desktop:latest
+    container_name: desktop-celery_beat
+    command: celery -A core beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    environment:
+      - DEBUG=0
+      - DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1]
+      - CELERY_BROKER=redis://redis:6379/0
+      - CELERY_BACKEND=redis://redis:6379/0
+      - DB_PORT=5433
+      - DB_HOST=db
+      - DB_NAME=admintotal_desktop
+      - DB_USER=admintotal
+      - DB_PASSWORD=postgres
+      - ADMINTOTAL_URL_TEMPLATE=https://{0}.admintotal.com
+      - LOCAL_DEVELOPMENT=0
+    depends_on:
+      - django
+      - redis
+
+  db:
+    image: postgres:latest
+    container_name: desktop-db
+    command: -p 5433
+    environment:
+      - POSTGRES_DB=admintotal_desktop
+      - POSTGRES_USER=admintotal
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:latest
+    container_name: desktop-redis
+
+volumes:
+  postgres_data:
