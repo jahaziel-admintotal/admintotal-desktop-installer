@@ -15,3 +15,6 @@ Este proyecto puede ser ejecutado fácilmente usando Docker y Docker Compose en 
    
    ```bash
    docker-compose --version
+
+4. **Expose daemon on tcp://localhost:2375 without TLS**: Entrar a la configuración general de Docker desktop y habilitar la opción "Expose daemon on tcp://localhost:2375 without TLS"
+  
