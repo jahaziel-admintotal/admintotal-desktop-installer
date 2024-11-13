@@ -1,5 +1,6 @@
 services:
   django:
+    restart: always
     image: admintotal/desktop:latest
     container_name: desktop-django
     command: >
@@ -22,6 +23,7 @@ services:
       - redis
     
   nginx:
+    restart: always
     image: admintotal/desktop-nginx:latest
     container_name: desktop-nginx
     command: >
@@ -33,6 +35,7 @@ services:
       - django
 
   celery:
+    restart: always
     image: admintotal/desktop:latest
     container_name: desktop-celery
     command: >
@@ -52,6 +55,7 @@ services:
       - redis
 
   celery_beat:
+    restart: always
     image: admintotal/desktop:latest
     container_name: desktop-celery_beat
     command: >
@@ -73,6 +77,7 @@ services:
       - redis
 
   db:
+    restart: always
     image: postgres:17
     container_name: desktop-db
     command: -p 5433
@@ -84,6 +89,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
       
   redis:
+    restart: always
     image: redis:7.4.1
     container_name: desktop-redis
 
