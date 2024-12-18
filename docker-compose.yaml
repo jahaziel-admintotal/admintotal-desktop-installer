@@ -39,7 +39,7 @@ services:
     image: admintotal/desktop:latest
     container_name: desktop-celery
     command: >
-      bash -c "/usr/src/app/docker/wait-for-it.sh django:7000 -- celery -A core worker -l INFO"
+      bash -c "/usr/src/app/docker/wait-for-it.sh django:7000 -- celery -A core worker -E -l INFO"
     environment:
       - DEBUG=0
       - DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1] 10.26.0.225
