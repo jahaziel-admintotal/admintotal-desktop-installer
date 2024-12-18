@@ -2,8 +2,8 @@
 REM Cambia al directorio donde se encuentra el script BAT
 cd /d "%~dp0"
 
-REM Ejecuta el comando docker compose up
-docker compose up
+echo Descargando las últimas versiones de las imágenes de los contenedores...
+docker compose pull
 
-REM Mantén la ventana abierta
+echo Descarga completada. Puedes iniciar los contenedores desde Docker Desktop.
 pause
