@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Cambia al directorio donde se encuentra el script
-cd "$(dirname "$0")"
+# Cambia al directorio donde se encuentra el docker-compose.yaml
+cd ..
 
 # Obtener la IP local de la máquina (IPv4)
 SERVER_IP=$(hostname -I | awk '{print $1}')
@@ -31,6 +31,9 @@ echo "Archivo .env creado con éxito."
 
 # Descargar las últimas versiones de las imágenes de los contenedores
 echo "Descargando las últimas versiones de las imágenes de los contenedores..."
+docker compose pull
+
+echo "Iniciando los contenedores en segundo plano..."
 docker compose up -d
 
-echo "Descarga completada. Puedes iniciar los contenedores desde Docker Desktop."
+echo "Contenedores iniciados. Puedes ver el estado desde Docker Desktop."
