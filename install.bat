@@ -15,8 +15,8 @@ echo Creando archivo .env con las variables necesarias...
 (
     echo DEBUG=0
     echo SERVER_IP=%SERVER_IP%
-    echo DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1] 10.26.0.225 10.26.0.225
-    echo CSRF_TRUSTED_ORIGINS=localhost:8081 localhost:3001 127.0.0.1:8081 127.0.0.1:3001 10.26.0.225:8081 10.26.0.225:3001
+    echo DJANGO_ALLOWED_HOSTS=*
+    echo CSRF_TRUSTED_ORIGINS=localhost:8081 localhost:3001 127.0.0.1:8081 127.0.0.1:3001 %SERVER_IP%:8081 %SERVER_IP%:3001
     echo CELERY_BROKER=redis://redis:6379/0
     echo CELERY_BACKEND=redis://redis:6379/0
     echo DB_PORT=5433
@@ -26,6 +26,9 @@ echo Creando archivo .env con las variables necesarias...
     echo DB_PASSWORD=postgres
     echo ADMINTOTAL_URL_TEMPLATE=https://{0}.admintotal.com
     echo LOCAL_DEVELOPMENT=0
+    echo POSTGRES_DB=admintotal_desktop
+    echo POSTGRES_USER=admintotal
+    echo POSTGRES_PASSWORD=postgres
 ) > .env
 
 echo Archivo .env creado con éxito.
