@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# Cambiar al directorio donde se encuentra el script
-cd "$(dirname "$0")"
-
 # Ir a la carpeta padre donde está el archivo docker-compose.yaml
 cd ..
 
