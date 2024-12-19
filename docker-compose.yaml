@@ -5,19 +5,8 @@ services:
     container_name: desktop-django
     command: >
       bash -c "./docker/wait-for-it.sh db:5433 -- ./docker/wait-for-it.sh redis:6379 -- python manage.py migrate && gunicorn core.wsgi:application --bind 0.0.0.0:7000"
-    environment:
-      - DEBUG=0
-      - DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1] 10.26.0.225 10.26.0.225
-      - CSRF_TRUSTED_ORIGINS=localhost:8081 localhost:3001 127.0.0.1:8081 127.0.0.1:3001 10.26.0.225:8081 10.26.0.225:3001
-      - CELERY_BROKER=redis://redis:6379/0
-      - CELERY_BACKEND=redis://redis:6379/0
-      - DB_PORT=5433
-      - DB_HOST=db
-      - DB_NAME=admintotal_desktop
-      - DB_USER=admintotal
-      - DB_PASSWORD=postgres
-      - ADMINTOTAL_URL_TEMPLATE=https://{0}.admintotal.com
-      - LOCAL_DEVELOPMENT=0
+    env_file:
+      - .env
     depends_on:
       - db
       - redis
@@ -40,16 +29,8 @@ services:
     container_name: desktop-celery
     command: >
       bash -c "/usr/src/app/docker/wait-for-it.sh django:7000 -- celery -A core worker -E -l INFO"
-    environment:
-      - DEBUG=0
-      - DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1] 10.26.0.225
-      - CELERY_BROKER=redis://redis:6379/0
-      - CELERY_BACKEND=redis://redis:6379/0
-      - DB_PORT=5433
-      - DB_HOST=db
-      - DB_NAME=admintotal_desktop
-      - DB_USER=admintotal
-      - DB_PASSWORD=postgres
+    env_file:
+      - .env
     depends_on:
       - django
       - redis
@@ -60,18 +41,8 @@ services:
     container_name: desktop-celery_beat
     command: >
       bash -c "/usr/src/app/docker/wait-for-it.sh django:7000 -- celery -A core beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler"
-    environment:
-      - DEBUG=0
-      - DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1] 10.26.0.225
-      - CELERY_BROKER=redis://redis:6379/0
-      - CELERY_BACKEND=redis://redis:6379/0
-      - DB_PORT=5433
-      - DB_HOST=db
-      - DB_NAME=admintotal_desktop
-      - DB_USER=admintotal
-      - DB_PASSWORD=postgres
-      - ADMINTOTAL_URL_TEMPLATE=https://{0}.admintotal.com
-      - LOCAL_DEVELOPMENT=0
+    env_file:
+      - .env
     depends_on:
       - django
       - redis
@@ -81,10 +52,8 @@ services:
     image: postgres:17
     container_name: desktop-db
     command: -p 5433
-    environment:
-      - POSTGRES_DB=admintotal_desktop
-      - POSTGRES_USER=admintotal
-      - POSTGRES_PASSWORD=postgres
+    env_file:
+      - .env
     volumes:
       - postgres_data:/var/lib/postgresql/data
       
