@@ -1,7 +1,10 @@
 #!/bin/bash
 
-# Cambia al directorio donde se encuentra el script
+# Cambiar al directorio donde se encuentra el script
 cd "$(dirname "$0")"
+
+# Ir a la carpeta padre donde está el archivo docker-compose.yaml
+cd ..
 
 # Actualizar las imágenes de los contenedores
 echo "Actualizando imágenes de los contenedores..."
