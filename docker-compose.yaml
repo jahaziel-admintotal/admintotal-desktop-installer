@@ -4,7 +4,7 @@ services:
     image: admintotal/desktop:latest
     container_name: desktop-django
     command: >
-      bash -c "./docker/wait-for-it.sh db:5433 -- ./docker/wait-for-it.sh redis:6379 -- python manage.py migrate && gunicorn core.wsgi:application --bind 0.0.0.0:7000 --timeout 60 --max-requests 500 --max-requests-jitter 50"
+      bash -c "./docker/wait-for-it.sh db:5433 -- ./docker/wait-for-it.sh redis:6379 -- python manage.py migrate && gunicorn core.wsgi:application --bind 0.0.0.0:7000 --timeout 240 --max-requests 500 --max-requests-jitter 50"
     env_file:
       - .env
     depends_on:
