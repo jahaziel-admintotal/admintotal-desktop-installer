@@ -29,6 +29,7 @@ echo Creando archivo .env con las variables necesarias...
     echo POSTGRES_DB=admintotal_desktop
     echo POSTGRES_USER=admintotal
     echo POSTGRES_PASSWORD=postgres
+    echo WEB_CONCURRENCY=20
 ) > .env
 
 echo Archivo .env creado con éxito.
